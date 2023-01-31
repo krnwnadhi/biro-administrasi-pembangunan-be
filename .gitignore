@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-/public
 
 
 # testing
@@ -12,7 +11,12 @@
 
 # production
 /build
+public
 /public
+/public/
+/public/images
+/public/images/
+/public/images/posts
 
 # misc
 .env
