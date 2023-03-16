@@ -26,16 +26,16 @@ const createPostController = expressAsyncHandler(async (req, res) => {
     }
 
     // get the path to image
-    // const localPath = `public/images/posts/${req.file.filename}`;
+    const localPath = `public/images/posts/${req.file.filename}`;
 
     //upload to cloudinary
-    // const imgUploaded = await cloudinaryUploadImage(localPath);
+    const imgUploaded = await cloudinaryUploadImage(localPath);
 
     try {
         const post = await Post.create({
             ...req.body,
             user: req?.user?._id,
-            // image: imgUploaded.url,
+            image: imgUploaded?.url,
             // title: req.body.title,
         });
         res.json(post);
@@ -51,9 +51,18 @@ const createPostController = expressAsyncHandler(async (req, res) => {
 
 //fetch all posts
 const fetchAllPostsController = expressAsyncHandler(async (req, res) => {
+    const hasCategory = req.query.category;
     try {
-        const posts = await Post.find({}).populate("user");
-        res.json(posts);
+        //check if has a category
+        if (hasCategory) {
+            const posts = await Post.find({ category: hasCategory }).populate(
+                "user"
+            );
+            res.json(posts);
+        } else {
+            const posts = await Post.find({}).populate("user");
+            res.json(posts);
+        }
     } catch (error) {
         res.json(error);
     }
