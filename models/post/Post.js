@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const postSchema = new mongoose.Schema(
     {
@@ -62,7 +63,12 @@ const postSchema = new mongoose.Schema(
     }
 );
 
+//Paginate
+postSchema.plugin(mongoosePaginate);
+
 //compile schema into model
 const Post = mongoose.model("Post", postSchema);
+
+// Post.paginate().then({});
 
 module.exports = Post;
