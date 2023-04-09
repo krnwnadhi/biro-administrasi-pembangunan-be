@@ -8,7 +8,7 @@ const cloudinaryUploadImage = require("../../utils/cloudinary");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
 const createPostController = expressAsyncHandler(async (req, res) => {
-    console.log(req.file);
+    // console.log(req.file);
 
     const { _id } = req?.body;
 
@@ -26,12 +26,12 @@ const createPostController = expressAsyncHandler(async (req, res) => {
         throw new Error("Creating Failed because it contains bad words");
     }
 
-    // get the path to image
+    
+// get the path to image
     const localPath = `public/images/posts/${req.file.filename}`;
 
     //upload to cloudinary
     const imgUploaded = await cloudinaryUploadImage(localPath);
-
     try {
         const post = await Post.create({
             ...req.body,
@@ -44,7 +44,7 @@ const createPostController = expressAsyncHandler(async (req, res) => {
         // res.json(imgUploaded);
 
         //remove uploaded images
-        // fs.unlinkSync(localPath);
+        fs.unlinkSync(localPath);
     } catch (error) {
         res.json(error);
     }
