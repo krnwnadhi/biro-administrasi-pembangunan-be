@@ -16,7 +16,7 @@ const createGalleryController = expressAsyncHandler(async (req, res) => {
 
         for (const file of files) {
             const { path, originalname, size, mimetype, buffer } = file;
-            console.log(file);
+            // console.log("file galleryController", file);
 
             const newPath = await uploader(path);
 
@@ -25,7 +25,6 @@ const createGalleryController = expressAsyncHandler(async (req, res) => {
                 filePath: newPath?.url,
                 fileType: mimetype,
                 fileSize: fileSizeFormatter(size, 2),
-                buffer: buffer,
             };
 
             urls.push(newFile);
@@ -38,8 +37,6 @@ const createGalleryController = expressAsyncHandler(async (req, res) => {
             images: urls,
         });
         res.json(response);
-        // await response.save();
-        // res.status(201).send("Files successfully uploaded");
     } else {
         res.status(500).send("Invalid response from server");
     }

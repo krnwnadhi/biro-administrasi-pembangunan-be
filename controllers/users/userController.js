@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 const Mailgen = require("mailgen");
 const sgMail = require("@sendgrid/mail");
 const crypto = require("crypto");
-const cloudinaryUploadImage = require("../../utils/cloudinary");
+const cloudinary = require("../../utils/cloudinary");
 const fs = require("fs");
 
 // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -426,7 +426,7 @@ const profilePhotoUpload = expressAsyncHandler(async (req, res) => {
     const localPath = `public/images/profile/${req.file.filename}`;
 
     //upload to cloudinary
-    const imgUploaded = await cloudinaryUploadImage(localPath);
+    const imgUploaded = await cloudinary.cloudinaryUploadImage(localPath);
     // console.log(imgUploaded);
 
     const foundUser = await User.findByIdAndUpdate(

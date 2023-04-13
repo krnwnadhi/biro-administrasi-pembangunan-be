@@ -6,7 +6,10 @@ const gallerySchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        images: [Object],
+        images: {
+            type: [Object],
+            default: undefined
+        },
     },
     {
         toJSON: {

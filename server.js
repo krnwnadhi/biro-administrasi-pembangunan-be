@@ -13,6 +13,7 @@ const emailRoutes = require("./routes/email/emailRoute");
 const categoryRoutes = require("./routes/category/categoryRoute");
 const cors = require("cors");
 const galleryRoutes = require("./routes/gallery/galleryRoute");
+const documentRoutes = require("./routes/documents/documentRoute");
 
 const PORT = process.env.PORT;
 
@@ -30,7 +31,9 @@ app.use("/api/v1/comments", commentRoutes);
 app.use("/api/v1/email", emailRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/gallery", galleryRoutes);
-// app.use("/api/v1/documents");
+app.use("/api/v1/documents", documentRoutes);
+
+// app.use(express.static(path.join(__dirname, "..", "build")));
 
 app.use(notFound);
 app.use(errorHandler);

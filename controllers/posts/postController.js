@@ -4,7 +4,7 @@ const validateMongodbId = require("../../utils/validateMongodbID");
 const fs = require("fs");
 const Filter = require("bad-words");
 const User = require("../../models/user/User");
-const cloudinaryUploadImage = require("../../utils/cloudinary");
+const cloudinary = require("../../utils/cloudinary");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
 const createPostController = expressAsyncHandler(async (req, res) => {
@@ -26,12 +26,11 @@ const createPostController = expressAsyncHandler(async (req, res) => {
         throw new Error("Creating Failed because it contains bad words");
     }
 
-    
-// get the path to image
+    // get the path to image
     const localPath = `public/images/posts/${req.file.filename}`;
 
     //upload to cloudinary
-    const imgUploaded = await cloudinaryUploadImage(localPath);
+    const imgUploaded = await cloudinary.cloudinaryUploadImage(localPath);
     try {
         const post = await Post.create({
             ...req.body,

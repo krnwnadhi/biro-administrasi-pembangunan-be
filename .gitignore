@@ -17,6 +17,8 @@ public
 /public/images
 /public/images/
 /public/images/posts
+/uploads
+/uploads/
 
 # misc
 .env

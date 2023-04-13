@@ -47,6 +47,29 @@ const photoUploadMdw = multer({
     },
 });
 
+// document uploads
+const documentUploadMdw = multer({
+    storage: multer.diskStorage({
+        destination(req, file, cb) {
+            cb(null, "./uploads");
+        },
+        filename(req, file, cb) {
+            cb(null, `biroadpemb-${Date.now()}-${file.originalname}`);
+        },
+    }),
+    limits: {
+        fileSize: 1000000, // max file size 1MB = 1000000 bytes
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(pdf|doc|docx|xlsx|xls)$/)) {
+            return cb(
+                new Error("Only upload files with pdf, xslx, xls format.")
+            );
+        }
+        cb(undefined, true); // continue with upload
+    },
+});
+
 //image resize function
 const profilePhotoResizeMdw = async (req, res, next) => {
     //check if there is no file
@@ -98,7 +121,7 @@ const galleryMdw = async (req, res, next) => {
 
     await Promise.all(
         req.files.map(async (file) => {
-            // console.log(file);
+            console.log("file galleryMdw", file);
             const newName = `biroadpemb-${Date.now()}-${
                 req.files.originalname
             }`;
@@ -123,4 +146,5 @@ module.exports = {
     postImageResizeMdw,
     galleryMdw,
     galleryUploadMdw,
+    documentUploadMdw,
 };
