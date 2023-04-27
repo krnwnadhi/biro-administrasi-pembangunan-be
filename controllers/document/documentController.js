@@ -1,12 +1,13 @@
 const expressAsyncHandler = require("express-async-handler");
 const validateMongodbId = require("../../utils/validateMongodbID");
-const fs = require("fs");
-const cloudinary = require("../../utils/cloudinary");
 const Document = require("../../models/document/document");
+// const Uploads = require("../../uploads/");
+// const path = require("path");
 
 const createDocumentController = expressAsyncHandler(async (req, res) => {
     const { title, description } = req.body;
     const { path, mimetype } = req.file;
+
     try {
         const file = new Document({
             title,
@@ -16,7 +17,6 @@ const createDocumentController = expressAsyncHandler(async (req, res) => {
         });
         await file.save();
         res.json(file);
-        // res.json(response);
     } catch (error) {
         res.status(400).send(
             error,
@@ -40,26 +40,18 @@ const fetchAllDocumentController = expressAsyncHandler(async (req, res) => {
 });
 
 const singleDocumentController = expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
-
-    validateMongodbId(id);
-
     try {
-        const file = await Document.findById(id);
+        const document = await Document.findById(req.params.id);
         res.set({
-            "Content-Type": file.file_mimetype,
+            "Content-Type": document.file_mimetype,
         });
-        res.sendFile(path.join(__dirname, "..", file.file_path));
-    } catch (error) {
-        res.status(400).send("Error while downloading file. Try again later.");
-    }
 
-    // try {
-    //     const response = await Document.findById(id);
-    //     res.json(response);
-    // } catch (error) {
-    //     res.json(error);
-    // }
+        res.download(document.file_path);
+
+        console.log(document);
+    } catch (error) {
+        res.status(400).send("Error sewaktu download. Coba lagi.");
+    }
 });
 
 const updateDocumentController = expressAsyncHandler(async (req, res) => {
@@ -81,8 +73,8 @@ const deleteDocumentController = expressAsyncHandler(async (req, res) => {
     validateMongodbId(id);
 
     try {
-        const response = await Document.findByIdAndDelete(id);
-        // res.json(response);
+        await Document.findByIdAndDelete(id);
+
         res.send("files deleted successfully");
     } catch (error) {
         res.json(error);

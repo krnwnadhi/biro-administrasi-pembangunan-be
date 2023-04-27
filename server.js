@@ -1,5 +1,6 @@
 const express = require("express");
 const dbConnect = require("./config/db/dbConnect");
+const path = require("path");
 
 const app = express();
 const dotenv = require("dotenv");
@@ -24,6 +25,7 @@ app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
+app.use(express.static(path.join(__dirname, "..", "build")));
 
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
@@ -32,8 +34,6 @@ app.use("/api/v1/email", emailRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/gallery", galleryRoutes);
 app.use("/api/v1/documents", documentRoutes);
-
-// app.use(express.static(path.join(__dirname, "..", "build")));
 
 app.use(notFound);
 app.use(errorHandler);

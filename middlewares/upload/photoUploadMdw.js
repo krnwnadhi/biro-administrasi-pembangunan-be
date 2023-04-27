@@ -58,7 +58,7 @@ const documentUploadMdw = multer({
         },
     }),
     limits: {
-        fileSize: 1000000, // max file size 1MB = 1000000 bytes
+        fileSize: 1000000, // 1MB = 1000000 bytes
     },
     fileFilter(req, file, cb) {
         if (!file.originalname.match(/\.(pdf|doc|docx|xlsx|xls)$/)) {
@@ -66,7 +66,7 @@ const documentUploadMdw = multer({
                 new Error("Only upload files with pdf, xslx, xls format.")
             );
         }
-        cb(undefined, true); // continue with upload
+        cb(undefined, true);
     },
 });
 
