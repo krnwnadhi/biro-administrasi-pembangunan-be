@@ -3,9 +3,6 @@ const {
     documentUploadMdw,
 } = require("../../middlewares/upload/photoUploadMdw");
 const {
-    createGalleryController,
-} = require("../../controllers/gallery/galleryController");
-const {
     fetchAllDocumentController,
     singleDocumentController,
     deleteDocumentController,

@@ -3,6 +3,10 @@ const Category = require("../../models/category/category");
 const validateMongodbId = require("../../utils/validateMongodbID");
 
 const createCategoryController = expressAsyncHandler(async (req, res) => {
+    const categoryExists = await Category.findOne({ title: req?.body?.title });
+
+    if (categoryExists) throw new Error("Kategori sudah ada.");
+
     try {
         const category = await Category.create({
             user: req?.user?._id,
