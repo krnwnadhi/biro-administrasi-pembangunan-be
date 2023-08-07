@@ -6,9 +6,9 @@ const gallerySchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        images: {
-            type: [Object],
-            default: undefined
+        image: {
+            type: String,
+            default: undefined,
         },
     },
     {

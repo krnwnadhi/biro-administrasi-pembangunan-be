@@ -9,6 +9,7 @@ const {
 } = require("../../controllers/gallery/galleryController");
 const {
     photoUploadMdw,
+    galleryImageResizeMdw,
     galleryMdw,
     galleryUploadMdw,
 } = require("../../middlewares/upload/photoUploadMdw");
@@ -18,8 +19,8 @@ const galleryRoute = express.Router();
 galleryRoute.post(
     "/",
     authMiddleware,
-    galleryUploadMdw.array("images", 5),
-    // galleryMdw,
+    photoUploadMdw.single("image"),
+    galleryImageResizeMdw,
     createGalleryController
 );
 

@@ -100,6 +100,21 @@ const postImageResizeMdw = async (req, res, next) => {
     next();
 };
 
+//Post Image Resize function
+const galleryImageResizeMdw = async (req, res, next) => {
+    //check if there is no file
+    if (!req.file) return next();
+
+    req.file.filename = `user-${Date.now()}-${req.file.originalname}`;
+
+    await sharp(req.file.buffer)
+        .resize(500, 500)
+        .toFormat("jpeg")
+        .jpeg({ quality: 90 })
+        .toFile(path.join(`public/images/gallery/${req.file.filename}`));
+    next();
+};
+
 const galleryMdw = async (req, res, next) => {
     // // check if there is no file
     // // console.log(req.body);
@@ -144,6 +159,7 @@ module.exports = {
     photoUploadMdw,
     profilePhotoResizeMdw,
     postImageResizeMdw,
+    galleryImageResizeMdw,
     galleryMdw,
     galleryUploadMdw,
     documentUploadMdw,

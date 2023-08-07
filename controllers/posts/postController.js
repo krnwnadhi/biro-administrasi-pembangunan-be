@@ -31,6 +31,7 @@ const createPostController = expressAsyncHandler(async (req, res) => {
 
     //upload to cloudinary
     const imgUploaded = await cloudinary.cloudinaryUploadImage(localPath);
+
     try {
         const post = await Post.create({
             ...req.body,

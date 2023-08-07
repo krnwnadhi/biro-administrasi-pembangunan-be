@@ -6,40 +6,66 @@ const path = require("path");
 const fs = require("fs");
 
 const createGalleryController = expressAsyncHandler(async (req, res) => {
-    const uploader = async (path) =>
-        await cloudinary.cloudinaryUploadImage(path, "Images");
+    try {
+        // get the path to image
+        const localPath = `public/images/gallery/${req.file.filename}`;
 
-    if (req.method === "POST") {
-        const urls = [];
+        //upload to cloudinary
+        // const b64 = Buffer.from(req.file.buffer).toString("base64");
+        // let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+        const cldRes = await cloudinary.cloudinaryUploadImage(localPath);
 
-        const files = req.files;
-
-        for (const file of files) {
-            const { path, originalname, size, mimetype, buffer } = file;
-            // console.log("file galleryController", file);
-
-            const newPath = await uploader(path);
-
-            const newFile = {
-                fileName: originalname,
-                filePath: newPath?.url,
-                fileType: mimetype,
-                fileSize: fileSizeFormatter(size, 2),
-            };
-
-            urls.push(newFile);
-
-            fs.unlinkSync(path);
-        }
-
-        const response = await Gallery.create({
+        const galleryUpload = await Gallery.create({
+            ...req.body,
             title: req.body.title,
-            images: urls,
+            image: cldRes?.url,
         });
-        res.json(response);
-    } else {
-        res.status(500).send("Invalid response from server");
+        res.json(galleryUpload);
+
+        fs.unlinkSync(localPath);
+    } catch (error) {
+        console.log(error);
+        res.send({
+            message: error.message,
+        });
     }
+
+    // -------------------------------------------------------------------------------------
+
+    // const uploader = async (path) =>
+    //     await cloudinary.cloudinaryUploadImage(path, "Images");
+
+    // if (req.method === "POST") {
+    //     const urls = [];
+
+    //     const files = req.files;
+
+    //     for (const file of files) {
+    //         const { path, originalname, size, mimetype, buffer } = file;
+    //         // console.log("file galleryController", file);
+
+    //         const newPath = await uploader(path);
+
+    //         const newFile = {
+    //             fileName: originalname,
+    //             filePath: newPath?.url,
+    //             fileType: mimetype,
+    //             fileSize: fileSizeFormatter(size, 2),
+    //         };
+
+    //         urls.push(newFile);
+
+    //         fs.unlinkSync(path);
+    //     }
+
+    //     const response = await Gallery.create({
+    //         title: req.body.title,
+    //         images: urls,
+    //     });
+    //     res.json(response);
+    // } else {
+    //     res.status(500).send("Invalid response from server");
+    // }
 });
 
 const fileSizeFormatter = (bytes, decimal) => {
