@@ -24,11 +24,11 @@ galleryRoute.post(
     createGalleryController
 );
 
+galleryRoute.put("/:id", authMiddleware, updateGalleryController);
+
 galleryRoute.get("/", authMiddleware, allGalleryController);
 
 galleryRoute.get("/:id", authMiddleware, singleGalleryController);
-
-galleryRoute.put("/:id", authMiddleware, updateGalleryController);
 
 galleryRoute.delete("/:id", authMiddleware, deleteGalleryController);
 

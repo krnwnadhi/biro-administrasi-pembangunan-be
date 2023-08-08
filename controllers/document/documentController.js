@@ -27,7 +27,7 @@ const createDocumentController = expressAsyncHandler(async (req, res) => {
 
 const fetchAllDocumentController = expressAsyncHandler(async (req, res) => {
     const page = parseInt(req.query.page) - 1 || 0;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || 12;
     const search = req.query.search_query || "";
 
     const offset = limit * page;
@@ -37,12 +37,6 @@ const fetchAllDocumentController = expressAsyncHandler(async (req, res) => {
     const totalPage = Math.ceil(totalItem / limit);
 
     try {
-        // const files = await Document.find({});
-        // const sortedByCreationDate = files.sort(
-        //     (a, b) => b.createdAt - a.createdAt
-        // );
-        // res.send(sortedByCreationDate);
-
         const result = await Document.find({
             title: { $regex: search, $options: "i" },
         })

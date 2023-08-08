@@ -29,43 +29,6 @@ const createGalleryController = expressAsyncHandler(async (req, res) => {
             message: error.message,
         });
     }
-
-    // -------------------------------------------------------------------------------------
-
-    // const uploader = async (path) =>
-    //     await cloudinary.cloudinaryUploadImage(path, "Images");
-
-    // if (req.method === "POST") {
-    //     const urls = [];
-
-    //     const files = req.files;
-
-    //     for (const file of files) {
-    //         const { path, originalname, size, mimetype, buffer } = file;
-    //         // console.log("file galleryController", file);
-
-    //         const newPath = await uploader(path);
-
-    //         const newFile = {
-    //             fileName: originalname,
-    //             filePath: newPath?.url,
-    //             fileType: mimetype,
-    //             fileSize: fileSizeFormatter(size, 2),
-    //         };
-
-    //         urls.push(newFile);
-
-    //         fs.unlinkSync(path);
-    //     }
-
-    //     const response = await Gallery.create({
-    //         title: req.body.title,
-    //         images: urls,
-    //     });
-    //     res.json(response);
-    // } else {
-    //     res.status(500).send("Invalid response from server");
-    // }
 });
 
 const fileSizeFormatter = (bytes, decimal) => {
@@ -83,9 +46,34 @@ const fileSizeFormatter = (bytes, decimal) => {
 };
 
 const allGalleryController = expressAsyncHandler(async (req, res) => {
+    const page = parseInt(req.query.page) - 1 || 0;
+    const limit = parseInt(req.query.limit) || 12;
+    const search = req.query.search_query || "";
+
+    const offset = limit * page;
+    const totalItem = await Gallery.countDocuments({
+        title: { $regex: search, $options: "i" },
+    });
+    const totalPage = Math.ceil(totalItem / limit);
+
     try {
-        const response = await Gallery.find({});
-        res.json(response);
+        const result = await Gallery.find({
+            title: { $regex: search, $options: "i" },
+        })
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(limit)
+            .exec();
+
+        // res.json(response);
+        res.status(200).json({
+            result: result,
+            page: page + 1,
+            limit: limit,
+            totalItem: totalItem,
+            totalPage: totalPage,
+            hasMore: result.length >= limit ? true : false,
+        });
     } catch (error) {
         res.json(error);
     }
