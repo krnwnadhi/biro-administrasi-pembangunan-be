@@ -69,7 +69,7 @@ const singleDocumentController = expressAsyncHandler(async (req, res) => {
 
         res.download(document.file_path);
 
-        console.log(document);
+        // console.log(document);
     } catch (error) {
         res.status(400).send("Error sewaktu download. Coba lagi.");
     }

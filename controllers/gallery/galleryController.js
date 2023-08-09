@@ -98,8 +98,17 @@ const updateGalleryController = expressAsyncHandler(async (req, res) => {
     validateMongodbId(id);
 
     try {
-        const response = await Gallery.findByIdAndUpdate(id, {});
-        res.json("Update");
+        const response = await Gallery.findByIdAndUpdate(
+            id,
+            {
+                title: req?.body?.title,
+            },
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
+        res.json(response);
     } catch (error) {
         res.json(error);
     }

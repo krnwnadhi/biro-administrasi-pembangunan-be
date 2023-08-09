@@ -126,7 +126,7 @@ const updatePassword = expressAsyncHandler(async (req, res) => {
     const { _id } = req.user;
     const { password } = req.body;
 
-    console.log(_id, password);
+    // console.log(_id, password);
 
     validateMongodbId(_id);
 
@@ -246,7 +246,7 @@ const generateEmailVerification = expressAsyncHandler(async (req, res) => {
         //save user account information
         await user.save();
 
-        console.log(verificationToken);
+        // console.log(verificationToken);
 
         const resetURL = `If you were requested to verify your account, verify now within 3 minutes, otherwise ignore this message <a href="http://localhost:3333/verify-account/${verificationToken}">Verify Account</a>`;
 
@@ -363,7 +363,7 @@ const forgetPassword = expressAsyncHandler(async (req, res) => {
 
     try {
         const token = await user.createPasswordResetToken();
-        console.log(token);
+        // console.log(token);
         await user.save();
 
         const resetURL = `If you were requested to reset your password, reset now within 3 minutes, otherwise ignore this message <a href="http://localhost:3333/reset-password/${token}">Reset Password</a>`;

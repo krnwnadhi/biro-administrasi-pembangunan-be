@@ -237,7 +237,7 @@ const fetchSinglePostController = expressAsyncHandler(async (req, res) => {
 });
 
 const updatePostController = expressAsyncHandler(async (req, res) => {
-    console.log(req.user);
+    // console.log(req.user);
     const { id } = req.params;
 
     validateMongodbId(id);
