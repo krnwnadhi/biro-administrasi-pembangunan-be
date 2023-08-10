@@ -26,7 +26,7 @@ galleryRoute.post(
 
 galleryRoute.put("/:id", authMiddleware, updateGalleryController);
 
-galleryRoute.get("/", authMiddleware, allGalleryController);
+galleryRoute.get("/", allGalleryController);
 
 galleryRoute.get("/:id", authMiddleware, singleGalleryController);
 
