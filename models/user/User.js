@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema(
         },
         bio: {
             type: String,
+            default: "Admin Biro Administrasi Pembangunan Provinsi Jambi",
         },
         postCount: {
             type: Number,

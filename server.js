@@ -1,6 +1,7 @@
 const express = require("express");
 const dbConnect = require("./config/db/dbConnect");
 const path = require("path");
+const cors = require("cors");
 
 const app = express();
 const dotenv = require("dotenv");
@@ -12,7 +13,6 @@ const postRoutes = require("./routes/posts/postRoute");
 const commentRoutes = require("./routes/comments/commentRoute");
 const emailRoutes = require("./routes/email/emailRoute");
 const categoryRoutes = require("./routes/category/categoryRoute");
-const cors = require("cors");
 const galleryRoutes = require("./routes/gallery/galleryRoute");
 const documentRoutes = require("./routes/documents/documentRoute");
 
