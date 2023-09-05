@@ -1,8 +1,7 @@
 const express = require("express");
 const dbConnect = require("./config/db/dbConnect");
 const path = require("path");
-var cors = require("cors");
-app.use(cors());
+
 const cors = require("cors");
 
 const app = express();
@@ -26,11 +25,7 @@ dbConnect();
 app.use(express.json({ limit: "5mb" }));
 // app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
-
 app.use(express.static(path.join(__dirname, "..", "build")));
-
-app.use(cors());
 
 app.get("/", (req, res) => {
     res.json({ msg: "Welcome to Biro Adpem API v1 ..." });
