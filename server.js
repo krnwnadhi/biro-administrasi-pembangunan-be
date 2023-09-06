@@ -33,13 +33,69 @@ app.get("/", (req, res) => {
     res.json({ msg: "Welcome to Biro Adpem API v1 ..." });
 });
 
-app.use("/api/v1/users", cors(), userRoutes);
-app.use("/api/v1/posts", cors(), postRoutes);
-app.use("/api/v1/comments", cors(), commentRoutes);
-app.use("/api/v1/email", cors(), emailRoutes);
-app.use("/api/v1/category", cors(), categoryRoutes);
-app.use("/api/v1/gallery", cors(), galleryRoutes);
-app.use("/api/v1/documents", cors(), documentRoutes);
+app.use(
+    "/api/v1/users",
+    createProxyMiddleware({
+        target: "https://adpem-jambiprov-go-id.vercel.app",
+        changeOrigin: true,
+    }),
+    cors(),
+    userRoutes
+);
+app.use(
+    "/api/v1/posts",
+    createProxyMiddleware({
+        target: "https://adpem-jambiprov-go-id.vercel.app",
+        changeOrigin: true,
+    }),
+    cors(),
+    postRoutes
+);
+app.use(
+    "/api/v1/comments",
+    createProxyMiddleware({
+        target: "https://adpem-jambiprov-go-id.vercel.app",
+        changeOrigin: true,
+    }),
+    cors(),
+    commentRoutes
+);
+app.use(
+    "/api/v1/email",
+    createProxyMiddleware({
+        target: "https://adpem-jambiprov-go-id.vercel.app",
+        changeOrigin: true,
+    }),
+    cors(),
+    emailRoutes
+);
+app.use(
+    "/api/v1/category",
+    createProxyMiddleware({
+        target: "https://adpem-jambiprov-go-id.vercel.app",
+        changeOrigin: true,
+    }),
+    cors(),
+    categoryRoutes
+);
+app.use(
+    "/api/v1/gallery",
+    createProxyMiddleware({
+        target: "https://adpem-jambiprov-go-id.vercel.app",
+        changeOrigin: true,
+    }),
+    cors(),
+    galleryRoutes
+);
+app.use(
+    "/api/v1/documents",
+    createProxyMiddleware({
+        target: "https://adpem-jambiprov-go-id.vercel.app",
+        changeOrigin: true,
+    }),
+    cors(),
+    documentRoutes
+);
 
 app.use(notFound);
 app.use(errorHandler);
