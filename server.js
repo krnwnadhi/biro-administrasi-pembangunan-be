@@ -39,7 +39,6 @@ app.use(
         target: "https://adpem-jambiprov-go-id.vercel.app",
         changeOrigin: true,
     }),
-    cors(),
     userRoutes
 );
 app.use(
@@ -48,7 +47,6 @@ app.use(
         target: "https://adpem-jambiprov-go-id.vercel.app",
         changeOrigin: true,
     }),
-    cors(),
     postRoutes
 );
 app.use(
@@ -57,7 +55,6 @@ app.use(
         target: "https://adpem-jambiprov-go-id.vercel.app",
         changeOrigin: true,
     }),
-    cors(),
     commentRoutes
 );
 app.use(
@@ -66,7 +63,6 @@ app.use(
         target: "https://adpem-jambiprov-go-id.vercel.app",
         changeOrigin: true,
     }),
-    cors(),
     emailRoutes
 );
 app.use(
@@ -75,7 +71,6 @@ app.use(
         target: "https://adpem-jambiprov-go-id.vercel.app",
         changeOrigin: true,
     }),
-    cors(),
     categoryRoutes
 );
 app.use(
@@ -84,7 +79,6 @@ app.use(
         target: "https://adpem-jambiprov-go-id.vercel.app",
         changeOrigin: true,
     }),
-    cors(),
     galleryRoutes
 );
 app.use(
@@ -93,7 +87,6 @@ app.use(
         target: "https://adpem-jambiprov-go-id.vercel.app",
         changeOrigin: true,
     }),
-    cors(),
     documentRoutes
 );
 
