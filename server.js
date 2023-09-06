@@ -9,6 +9,7 @@ const app = express();
 app.use(
     cors({
         origin: "https://adpem-jambiprov-go-id.vercel.app",
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     })
 );
 
