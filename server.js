@@ -3,10 +3,14 @@ const dbConnect = require("./config/db/dbConnect");
 const path = require("path");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const { createProxyMiddleware } = require("http-proxy-middleware");
+// const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
-app.use(cors());
+app.use(
+    cors({
+        origin: "https://adpem-jambiprov-go-id.vercel.app",
+    })
+);
 
 dotenv.config();
 
@@ -33,18 +37,24 @@ app.get("/", (req, res) => {
     res.json({ msg: "Welcome to Biro Adpem API v1 ..." });
 });
 
-var corsOptions = {
-    origin: "https://adpem-jambiprov-go-id.vercel.app/",
-    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+// const allowlist = ["https://adpem-jambiprov-go-id.vercel.app"];
+// const corsOptionsDelegate = function (req, callback) {
+//     let corsOptions;
+//     if (allowlist.indexOf(req.header("Origin")) !== -1) {
+//         corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+//     } else {
+//         corsOptions = { origin: false }; // disable CORS for this request
+//     }
+//     callback(null, corsOptions); // callback expects two parameters: error and options
+// };
 
-app.use("/api/v1/users", cors(corsOptions), userRoutes);
-app.use("/api/v1/posts", cors(corsOptions), postRoutes);
-app.use("/api/v1/comments", cors(corsOptions), commentRoutes);
-app.use("/api/v1/email", cors(corsOptions), emailRoutes);
-app.use("/api/v1/category", cors(corsOptions), categoryRoutes);
-app.use("/api/v1/gallery", cors(corsOptions), galleryRoutes);
-app.use("/api/v1/documents", cors(corsOptions), documentRoutes);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/comments", commentRoutes);
+app.use("/api/v1/email", emailRoutes);
+app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/gallery", galleryRoutes);
+app.use("/api/v1/documents", documentRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
