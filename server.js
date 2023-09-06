@@ -33,13 +33,18 @@ app.get("/", (req, res) => {
     res.json({ msg: "Welcome to Biro Adpem API v1 ..." });
 });
 
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/posts", postRoutes);
-app.use("/api/v1/comments", commentRoutes);
-app.use("/api/v1/email", emailRoutes);
-app.use("/api/v1/category", categoryRoutes);
-app.use("/api/v1/gallery", galleryRoutes);
-app.use("/api/v1/documents", documentRoutes);
+var corsOptions = {
+    origin: "https://adpem-jambiprov-go-id.vercel.app/",
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use("/api/v1/users", cors(corsOptions), userRoutes);
+app.use("/api/v1/posts", cors(corsOptions), postRoutes);
+app.use("/api/v1/comments", cors(corsOptions), commentRoutes);
+app.use("/api/v1/email", cors(corsOptions), emailRoutes);
+app.use("/api/v1/category", cors(corsOptions), categoryRoutes);
+app.use("/api/v1/gallery", cors(corsOptions), galleryRoutes);
+app.use("/api/v1/documents", cors(corsOptions), documentRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
