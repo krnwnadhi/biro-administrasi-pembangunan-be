@@ -1,11 +1,13 @@
 const express = require("express");
 const dbConnect = require("./config/db/dbConnect");
 const path = require("path");
-
 const cors = require("cors");
+const dotenv = require("dotenv");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
-const dotenv = require("dotenv");
+app.use(cors());
+
 dotenv.config();
 
 const userRoutes = require("./routes/users/userRoute");
@@ -31,15 +33,13 @@ app.get("/", (req, res) => {
     res.json({ msg: "Welcome to Biro Adpem API v1 ..." });
 });
 
-app.use(cors());
-
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/posts", postRoutes);
-app.use("/api/v1/comments", commentRoutes);
-app.use("/api/v1/email", emailRoutes);
-app.use("/api/v1/category", categoryRoutes);
-app.use("/api/v1/gallery", galleryRoutes);
-app.use("/api/v1/documents", documentRoutes);
+app.use("/api/v1/users", cors(), userRoutes);
+app.use("/api/v1/posts", cors(), postRoutes);
+app.use("/api/v1/comments", cors(), commentRoutes);
+app.use("/api/v1/email", cors(), emailRoutes);
+app.use("/api/v1/category", cors(), categoryRoutes);
+app.use("/api/v1/gallery", cors(), galleryRoutes);
+app.use("/api/v1/documents", cors(), documentRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
