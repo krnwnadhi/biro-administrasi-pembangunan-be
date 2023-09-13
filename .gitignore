@@ -11,14 +11,14 @@
 
 # production
 /build
-public
-/public
-/public/
-/public/images
-/public/images/
-/public/images/posts
-/uploads
-/uploads/
+# public
+# /public
+# /public/
+# /public/images
+# /public/images/
+# /public/images/posts
+# /uploads
+# /uploads/
 
 # misc
 .env
