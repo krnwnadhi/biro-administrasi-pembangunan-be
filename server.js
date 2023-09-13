@@ -6,12 +6,6 @@ const dotenv = require("dotenv");
 // const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
-app.use(
-    cors({
-        origin: "https://adpem-jambiprov-go-id.vercel.app",
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    })
-);
 
 dotenv.config();
 
@@ -38,16 +32,7 @@ app.get("/", (req, res) => {
     res.json({ msg: "Welcome to Biro Adpem API v1 ..." });
 });
 
-// const allowlist = ["https://adpem-jambiprov-go-id.vercel.app"];
-// const corsOptionsDelegate = function (req, callback) {
-//     let corsOptions;
-//     if (allowlist.indexOf(req.header("Origin")) !== -1) {
-//         corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-//     } else {
-//         corsOptions = { origin: false }; // disable CORS for this request
-//     }
-//     callback(null, corsOptions); // callback expects two parameters: error and options
-// };
+app.use(cors());
 
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
@@ -56,6 +41,33 @@ app.use("/api/v1/email", emailRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/gallery", galleryRoutes);
 app.use("/api/v1/documents", documentRoutes);
+
+app.use(function (req, res, next) {
+    // Website you wish to allow to connect
+    res.setHeader(
+        "Access-Control-Allow-Origin",
+        "https://adpem-jambiprov-go-id.vercel.app"
+    );
+
+    // Request methods you wish to allow
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    );
+
+    // Request headers you wish to allow
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "X-Requested-With,content-type"
+    );
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader("Access-Control-Allow-Credentials", true);
+
+    // Pass to next layer of middleware
+    next();
+});
 
 app.use(notFound);
 app.use(errorHandler);
