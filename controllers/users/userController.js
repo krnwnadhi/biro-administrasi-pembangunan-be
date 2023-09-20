@@ -248,7 +248,7 @@ const generateEmailVerification = expressAsyncHandler(async (req, res) => {
 
         // console.log(verificationToken);
 
-        const resetURL = `If you were requested to verify your account, verify now within 3 minutes, otherwise ignore this message <a href="http://localhost:3333/verify-account/${verificationToken}">Verify Account</a>`;
+        const resetURL = `If you were requested to verify your account, verify now within 3 minutes, otherwise ignore this message <a href="http://localhost:8888/verify-account/${verificationToken}">Verify Account</a>`;
 
         let transporter = nodemailer.createTransport({
             service: "gmail",
@@ -359,18 +359,18 @@ const forgetPassword = expressAsyncHandler(async (req, res) => {
     const { email } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) throw new Error("Email tidak ditemukan");
+    if (!user) throw new Error("Email tidak ada/tidak ditemukan");
 
     try {
         const token = await user.createPasswordResetToken();
         // console.log(token);
         await user.save();
 
-        const resetURL = `If you were requested to reset your password, reset now within 3 minutes, otherwise ignore this message <a href="http://localhost:3333/reset-password/${token}">Reset Password</a>`;
+        const resetURL = `If you were requested to reset your password, reset now within 3 minutes, otherwise ignore this message <a href="http://localhost:3210/reset-password/${token}">Reset Password</a>`;
 
         let msg = {
-            from: "adhikurniawan2108@gmail.com",
             to: email,
+            from: "adhikurniawan2108@gmail.com",
             subject: "Reset Your Password",
             html: resetURL,
         };
