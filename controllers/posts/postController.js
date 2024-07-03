@@ -132,83 +132,101 @@ const createPostController = expressAsyncHandler(async (req, res) => {
 //     }
 // });
 
+//fetch all posts
+const fetchAllPostsController = expressAsyncHandler(async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) - 1 || 0;
+        const limit = parseInt(req.query.limit) || 5;
+        const search = req.query.search || "";
+        const sort = req.query.sort || "category";
+
+        req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
+
+        let sortBy = {};
+
+        if (sort[1]) {
+            sortBy[sort[0]] = sort[1];
+        } else {
+            sortBy[sort[0]] = "asc";
+        }
+
+        const posts = await Post.find({
+            title: { $regex: search, $options: "i" },
+        })
+            .sort(sortBy)
+            .skip(page * limit)
+            .limit(limit);
+
+        const total = await Post.countDocuments({
+            title: { $regex: search, $options: "i" },
+        });
+
+        const response = {
+            error: false,
+            total,
+            page: page + 1,
+            limit,
+            posts,
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        res.json(error);
+    }
+});
+
 // //fetch all posts
 // const fetchAllPostsController = expressAsyncHandler(async (req, res) => {
 //     try {
-//         const page = parseInt(req.query.page) - 1 || 0;
-//         const limit = parseInt(req.query.limit) || 5;
-//         const search = req.query.search || "";
-//         const sort = req.query.sort || "category";
+//         const result = await Post.find()
+//             .populate("user")
+//             .sort({ createdAt: -1 })
+//             .skip(offset)
+//             .limit(limit)
+//             .exec();
 
-//         req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
-
-//         let sortBy = {};
-
-//         if (sort[1]) {
-//             sortBy[sort[0]] = sort[1];
-//         } else {
-//             sortBy[sort[0]] = "asc";
-//         }
-
-//         const posts = await Post.find({
-//             title: { $regex: search, $options: "i" },
-//         })
-//             .sort(sortBy)
-//             .skip(page * limit)
-//             .limit(limit);
-
-//         const total = await Post.countDocuments({
-//             title: { $regex: search, $options: "i" },
+//         res.status(200).json({
+//             result: result,
 //         });
-
-//         const response = {
-//             error: false,
-//             total,
-//             page: page + 1,
-//             limit,
-//             posts,
-//         };
-
-//         res.status(200).json(response);
 //     } catch (error) {
 //         res.json(error);
 //     }
 // });
 
-//fetch all posts
-const fetchAllPostsController = expressAsyncHandler(async (req, res) => {
-    const page = parseInt(req.query.page) - 1 || 0;
-    const limit = parseInt(req.query.limit) || 10;
-    const search = req.query.search_query || "";
+// //fetch all posts
+// const fetchAllPostsController = expressAsyncHandler(async (req, res) => {
+//     const page = parseInt(req.query.page) - 1 || 0;
+//     const limit = parseInt(req.query.limit) || 10;
+//     const search = req.query.search_query || "";
 
-    const offset = limit * page;
-    const totalItem = await Post.countDocuments({
-        title: { $regex: search, $options: "i" },
-    });
-    const totalPage = Math.ceil(totalItem / limit);
+//     const offset = limit * page;
+//     const totalItem = await Post.countDocuments({
+//         title: { $regex: search, $options: "i" },
+//     });
+//     const totalPage = Math.ceil(totalItem / limit);
 
-    try {
-        const result = await Post.find({
-            title: { $regex: search, $options: "i" },
-        })
-            .populate("user")
-            .sort({ createdAt: -1 })
-            .skip(offset)
-            .limit(limit)
-            .exec();
+//     try {
+//         const result = await Post.find({
+//             title: { $regex: search, $options: "i" },
+//         })
+//             .populate("user")
+//             .sort({ createdAt: -1 })
+//             .skip(offset)
+//             .limit(limit)
+//             .exec();
 
-        res.status(200).json({
-            result: result,
-            page: page + 1,
-            limit: limit,
-            totalItem: totalItem,
-            totalPage: totalPage,
-            hasMore: result.length >= limit ? true : false,
-        });
-    } catch (error) {
-        res.json(error);
-    }
-});
+//         res.status(200).json({
+//             result: result,
+//             page: page + 1,
+//             limit: limit,
+//             totalItem: totalItem,
+//             totalPage: totalPage,
+//             hasMore: result.length >= limit ? true : false,
+//         });
+//     } catch (error) {
+//         res.json(error);
+//     }
+// });
 
 //fetch a single post
 const fetchSinglePostController = expressAsyncHandler(async (req, res) => {

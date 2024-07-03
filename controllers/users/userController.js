@@ -35,6 +35,11 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     //Check if user is exist
     const userFound = await User.findOne({ email });
 
+    if (!userFound) {
+        res.status(401);
+        throw new Error("Email tidak ditemukan!");
+    }
+
     //check if password is match
     if (userFound && (await userFound.isPasswordMatch(password))) {
         res.json({
@@ -47,7 +52,7 @@ const userLogin = expressAsyncHandler(async (req, res) => {
         });
     } else {
         res.status(401);
-        throw new Error("Data tidak ditemukan. Email/Password salah");
+        throw new Error("Password Salah!");
     }
 });
 
