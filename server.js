@@ -29,7 +29,7 @@ app.use(express.json({ limit: "5mb" }));
 app.use(express.static(path.join(__dirname, "..", "build")));
 
 app.get("/", (req, res) => {
-    res.json({ msg: "Welcome to Biro Adpem API v1 ..." });
+    res.json({ msg: "Welcome to Biro Adpem API v1.1" });
 });
 
 app.use(cors());

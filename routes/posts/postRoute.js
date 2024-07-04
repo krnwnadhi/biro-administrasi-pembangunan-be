@@ -7,6 +7,7 @@ const {
     deletePostController,
     likePostController,
     dislikePostController,
+    fetchPostsPaginationController,
 } = require("../../controllers/posts/postController");
 const authMiddleware = require("../../middlewares/auth/authMiddleware");
 const {
@@ -28,7 +29,9 @@ postRoute.put("/likes", authMiddleware, likePostController);
 
 postRoute.put("/dislikes", authMiddleware, dislikePostController);
 
-postRoute.get("/", fetchAllPostsController);
+postRoute.get("/", fetchPostsPaginationController);
+
+postRoute.get("/pagination", fetchAllPostsController);
 
 postRoute.get("/:id", fetchSinglePostController);
 
