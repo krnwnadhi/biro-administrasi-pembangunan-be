@@ -25,9 +25,24 @@ const createDocumentController = expressAsyncHandler(async (req, res) => {
     }
 });
 
+//fetch all document no pagination
+const fetchAllDocumentNoPaginationController = expressAsyncHandler(
+    async (req, res) => {
+        try {
+            const result = await Document.find().sort({ createdAt: -1 });
+
+            res.status(200).json({
+                result,
+            });
+        } catch (error) {
+            res.json(error);
+        }
+    }
+);
+
 const fetchAllDocumentController = expressAsyncHandler(async (req, res) => {
     const page = parseInt(req.query.page) - 1 || 0;
-    const limit = parseInt(req.query.limit) || 12;
+    const limit = parseInt(req.query.limit) || 3;
     const search = req.query.search_query || "";
 
     const offset = limit * page;
@@ -105,6 +120,7 @@ const deleteDocumentController = expressAsyncHandler(async (req, res) => {
 module.exports = {
     createDocumentController,
     fetchAllDocumentController,
+    fetchAllDocumentNoPaginationController,
     singleDocumentController,
     updateDocumentController,
     deleteDocumentController,

@@ -7,6 +7,7 @@ const {
     singleDocumentController,
     deleteDocumentController,
     createDocumentController,
+    fetchAllDocumentNoPaginationController,
 } = require("../../controllers/document/documentController");
 
 const documentRoute = express.Router();
@@ -18,6 +19,8 @@ documentRoute.post(
 );
 
 documentRoute.get("/", fetchAllDocumentController);
+
+documentRoute.get("/nopagination", fetchAllDocumentNoPaginationController);
 
 documentRoute.get("/:id", singleDocumentController);
 
