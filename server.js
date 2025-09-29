@@ -28,10 +28,6 @@ app.use(express.json({ limit: "5mb" }));
 
 app.use(express.static(path.join(__dirname, "..", "build")));
 
-// --- TAMBAHKAN BARIS DI BAWAH INI ---
-// Kode ini akan membuat folder 'uploads' dapat diakses secara publik.
-// Ketika ada permintaan ke '/uploads/namafile.pdf', Express akan
-// secara otomatis mencarikan file tersebut di dalam folder 'uploads' di direktori proyek Anda.
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req, res) => {
