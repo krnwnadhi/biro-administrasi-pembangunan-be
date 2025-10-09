@@ -79,6 +79,20 @@ const allGalleryController = expressAsyncHandler(async (req, res) => {
     }
 });
 
+const allGalleryControllerNopagination = expressAsyncHandler(
+    async (req, res) => {
+        try {
+            const result = await Gallery.find().sort({ createdAt: -1 });
+
+            res.status(200).json({
+                result,
+            });
+        } catch (error) {
+            res.json(error);
+        }
+    }
+);
+
 const singleGalleryController = expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
 
@@ -130,6 +144,7 @@ const deleteGalleryController = expressAsyncHandler(async (req, res) => {
 module.exports = {
     createGalleryController,
     allGalleryController,
+    allGalleryControllerNopagination,
     singleGalleryController,
     updateGalleryController,
     deleteGalleryController,

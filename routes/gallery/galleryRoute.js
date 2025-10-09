@@ -6,6 +6,7 @@ const {
     singleGalleryController,
     updateGalleryController,
     deleteGalleryController,
+    allGalleryControllerNopagination,
 } = require("../../controllers/gallery/galleryController");
 const {
     photoUploadMdw,
@@ -27,6 +28,8 @@ galleryRoute.post(
 galleryRoute.put("/:id", authMiddleware, updateGalleryController);
 
 galleryRoute.get("/", allGalleryController);
+
+galleryRoute.get("/nopagination", allGalleryControllerNopagination);
 
 galleryRoute.get("/:id", authMiddleware, singleGalleryController);
 

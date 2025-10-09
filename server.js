@@ -3,6 +3,7 @@ const dbConnect = require("./config/db/dbConnect");
 const path = require("path");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const { google } = require("googleapis");
 // const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
@@ -37,6 +38,58 @@ app.get("/", (req, res) => {
 });
 
 app.use(cors());
+
+// Inisialisasi service YouTube
+const youtube = google.youtube({
+    version: "v3",
+    auth: process.env.YOUTUBE_API_KEY,
+});
+
+// Endpoint API yang sudah dimodifikasi
+app.get("/api/videos", async (req, res) => {
+    try {
+        // 1. Tentukan ID Channel yang ingin Anda targetkan
+        const channelId = process.env.YOUTUBE_CHANNEL_ID_KEY;
+
+        // 2. PANGGILAN API PERTAMA: Dapatkan detail channel untuk menemukan ID playlist "uploads"
+        const channelResponse = await youtube.channels.list({
+            part: "contentDetails", // Bagian ini berisi info tentang playlist terkait
+            id: channelId,
+        });
+
+        // Cek jika channel ditemukan
+        if (
+            !channelResponse.data.items ||
+            channelResponse.data.items.length === 0
+        ) {
+            return res.status(404).json({ error: "Channel tidak ditemukan." });
+        }
+
+        // Ambil ID playlist "uploads" dari respons
+        const playlistId =
+            channelResponse.data.items[0].contentDetails.relatedPlaylists
+                .uploads;
+
+        // 3. PANGGILAN API KEDUA: Gunakan playlistId untuk mendapatkan 2 video terbaru
+        const playlistResponse = await youtube.playlistItems.list({
+            part: "snippet",
+            playlistId: playlistId,
+            maxResults: 2,
+        });
+
+        // 4. Ubah format data agar sesuai dengan frontend
+        const videos = playlistResponse.data.items.map((item, index) => ({
+            id: index,
+            title: item.snippet.title,
+            youtubeId: item.snippet.resourceId.videoId,
+        }));
+
+        res.json(videos);
+    } catch (error) {
+        console.error("Error saat mengambil data YouTube:", error.message);
+        res.status(500).json({ error: "Gagal mengambil video dari YouTube" });
+    }
+});
 
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
